@@ -7,8 +7,29 @@ local default_plugins = {
   -- my plugins
   "akinsho/flutter-tools.nvim",
 
+  -- rust
+  {
+    "rust-lang/rust.vim",
+    ft = "rust",
+    init = function()
+      vim.g.rustfmt_autosave = 1
+    end
+  },
+
+  {
+    "simrat39/rust-tools.nvim",
+    ft = "rust",
+    opts = function()
+      require("plugins.configs.rust-tools");
+    end,
+    config = function(_, option)
+      require("rust-tools").setup(option)
+    end
+  },
+
   -- nvchad plugins
   { "NvChad/extensions", branch = "v2.0" },
+  { "OmniSharp/omnisharp-vim" },
   {
 	  "Pocco81/true-zen.nvim",
     init = function()

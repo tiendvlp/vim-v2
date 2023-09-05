@@ -1,6 +1,8 @@
 dofile(vim.g.base46_cache .. "lsp")
 require "nvchad_ui.lsp"
 
+local util = require "lspconfig/util"
+
 local M = {}
 local utils = require "core.utils"
 
@@ -68,9 +70,48 @@ require("lspconfig").csharp_ls.setup{
 require("lspconfig").bufls.setup{}
 
 require("lspconfig").rust_analyzer.setup {
+  on_attach = M.on_attach,
+  filetypes={"rust"},
+  capabilities=M.capabilities,
+  root_dir=util.root_pattern("Cargo.toml"),
   settings = {
-    ['rust-analyzer'] = {},
+    ['rust-analyzer'] = {
+      imports = {
+        granularity = {
+          group = "module",
+        },
+        prefix = "self",
+      },
+      cargo = {
+        allFeatures = true,
+        buildScripts = {
+          enable = true,
+        },
+      },
+      -- enable clippy on save
+      checkOnSave = {
+        command = "clippy",
+      },
+      procMacro = {
+        enable = true
+      },
+    },
   },
+}
+
+local pid = vim.fn.getpid()
+local omnisharp_bin = "/opt/homebrew/Cellar/omnisharp/1.35.3/libexec/run"
+require("lspconfig").omnisharp.setup {
+  enable_editorconfig_support = true,
+  enable_ms_build_load_projects_on_demand = false,
+  enable_roslyn_analyzers = true,
+  organize_imports_on_format = false,
+  enable_import_completion = true,
+  sdk_include_prerelease = true,
+  analyze_open_documents_only = false,
+  capabilities = M.capabilities,
+  on_attach = M.on_attach,
+  cmd = { omnisharp_bin, "--languageserver" , "--hostPID", tostring(pid) };
 }
 
 local flutter = require('flutter-tools')

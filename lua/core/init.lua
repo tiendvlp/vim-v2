@@ -6,7 +6,7 @@ local config = require("core.utils").load_config()
 g.nvchad_theme = config.ui.theme
 g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 g.toggle_theme_icon = "   "
-g.transparency = config.ui.transparency
+g.transparency = true 
 
 -------------------------------------- options ------------------------------------------
 opt.laststatus = 3 -- global statusline
@@ -91,7 +91,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     config = require("core.utils").load_config()
 
     vim.g.nvchad_theme = config.ui.theme
-    vim.g.transparency = config.ui.transparency
+    vim.g.transparency = true 
 
     -- statusline
     require("plenary.reload").reload_module("nvchad_ui.statusline." .. config.ui.statusline.theme)
